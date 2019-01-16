@@ -170,6 +170,7 @@ public class MainController {
        modelAndView.addObject("listOfMap", listOfMap);
 
        return modelAndView; //после уйдем на представление, указанное чуть выше, если оно будет найдено.
+       //проверка Git
    }
 
 }
