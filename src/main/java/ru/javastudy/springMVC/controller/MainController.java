@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import ru.javastudy.springMVC.JDBC.ConnectionDB;
 import ru.javastudy.springMVC.JDBC.SelectUser;
 import ru.javastudy.springMVC.model.User;
 
@@ -32,41 +33,9 @@ public class MainController {
      */
     @RequestMapping(value = "/check-user")
     public ModelAndView checkUser(@ModelAttribute("userJSP") User user) {
-
-        try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        Connection con = null;
-        String username = "JDBCLogin";
-        String password = "4321";
-        String URL = "jdbc:sqlserver://localhost\\SQLEXPRESS;database=Sample1;";
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(URL, username, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        String SaveName=user.getName();
-        String SavePassword=user.getPassword();
-        try {
-            statement.executeUpdate("insert into test (Name,Password) values ("+SaveName+","+SavePassword+")");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        ResultSet resultSet = null;
-        try {
-            resultSet = statement.executeQuery("select * from test");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Connection connection = ConnectionDB.SetConnDB();
+        SelectUser.Upd(connection,user);
+        ResultSet resultSet = SelectUser.SelUser(connection);
         //while(resultSet.next()){ System.out.println(resultSet.getInt("Code")+" "+resultSet.getString("Name"));}
 
         ArrayList ArrayListResultSet= new ArrayList();
@@ -109,9 +78,9 @@ public class MainController {
 
    @RequestMapping(value = "/view-user")
    public ModelAndView viewUser() {
-       ResultSet resultSet = SelectUser.SelUser();
+       Connection connection = ConnectionDB.SetConnDB();
+       ResultSet resultSet = SelectUser.SelUser(connection);
        ArrayList ArrayListResultSet= new ArrayList();
-       //Map MapResultSet = new HashMap();
        ArrayList<HashMap<String,String>> listOfMap = new ArrayList<HashMap<String,String>>();
        HashMap<String,String> map;
        try {
