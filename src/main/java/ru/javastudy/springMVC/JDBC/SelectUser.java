@@ -4,12 +4,15 @@ import ru.javastudy.springMVC.model.User;
 
 import java.sql.*;
 
+import static java.sql.ResultSet.TYPE_SCROLL_INSENSITIVE;
+
+
 public class SelectUser {
     public static ResultSet SelUser(Connection connection) {
 
         Statement statement = null;
         try {
-            statement = connection.createStatement();
+            statement = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -25,7 +28,7 @@ public class SelectUser {
     public static void Upd(Connection connection, User user){
         Statement statement = null;
         try {
-            statement = connection.createStatement();
+            statement = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException e) {
             e.printStackTrace();
         }

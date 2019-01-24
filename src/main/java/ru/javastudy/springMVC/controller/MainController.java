@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ru.javastudy.springMVC.JDBC.ConnectionDB;
+import ru.javastudy.springMVC.JDBC.ResultSetOut;
 import ru.javastudy.springMVC.JDBC.SelectUser;
 import ru.javastudy.springMVC.model.User;
 
@@ -35,30 +36,13 @@ public class MainController {
     public ModelAndView checkUser(@ModelAttribute("userJSP") User user) {
         Connection connection = ConnectionDB.SetConnDB();
         SelectUser.Upd(connection,user);
-        ResultSet resultSet = SelectUser.SelUser(connection);
+        ResultSet resultSet;
+        resultSet = SelectUser.SelUser(connection);
         //while(resultSet.next()){ System.out.println(resultSet.getInt("Code")+" "+resultSet.getString("Name"));}
 
-        ArrayList ArrayListResultSet= new ArrayList();
-        //Map MapResultSet = new HashMap();
-        ArrayList<HashMap<String,String>> listOfMap = new ArrayList<HashMap<String,String>>();
-        HashMap<String,String> map;
-        try {
-            while (resultSet.next()) {
-                ArrayListResultSet.add(resultSet.getString("Name"));
-                map = new HashMap<String, String>();
-                map.put("Code", resultSet.getString("Code"));
-                map.put("Name", resultSet.getString("Name"));
-                listOfMap.add(map);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        for (int i=0;i<ArrayListResultSet.size();i++)
-            System.out.println("ArrayListResultSet:" + ArrayListResultSet.get(i));
-
-        for (int i=0;i<listOfMap.size();i++)
-            System.out.println("listOfMap:" + listOfMap.get(i));
+        ArrayList ArrayListResultSet =ResultSetOut.PrepareArrayList(resultSet);
+        resultSet = SelectUser.SelUser(connection);
+        ArrayList<HashMap<String,String>> listOfMap = ResultSetOut.PrepareArrayListHashMap(resultSet);
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -80,7 +64,7 @@ public class MainController {
    public ModelAndView viewUser() {
        Connection connection = ConnectionDB.SetConnDB();
        ResultSet resultSet = SelectUser.SelUser(connection);
-       ArrayList ArrayListResultSet= new ArrayList();
+       /*ArrayList ArrayListResultSet= new ArrayList();
        ArrayList<HashMap<String,String>> listOfMap = new ArrayList<HashMap<String,String>>();
        HashMap<String,String> map;
        try {
@@ -99,7 +83,11 @@ public class MainController {
            System.out.println("ArrayListResultSet:" + ArrayListResultSet.get(i));
 
        for (int i=0;i<listOfMap.size();i++)
-           System.out.println("listOfMap:" + listOfMap.get(i));
+           System.out.println("listOfMap:" + listOfMap.get(i));*/
+
+       ArrayList ArrayListResultSet =ResultSetOut.PrepareArrayList(resultSet);
+       resultSet = SelectUser.SelUser(connection);
+       ArrayList<HashMap<String,String>> listOfMap = ResultSetOut.PrepareArrayListHashMap(resultSet);
 
        ModelAndView modelAndView = new ModelAndView();
 
