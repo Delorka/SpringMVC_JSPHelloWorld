@@ -24,19 +24,20 @@ public class ResultSetOut {
 
     public static ArrayList<HashMap<String,String>> PrepareArrayListHashMap(ResultSet resultSet){
         ArrayList<HashMap<String,String>> listOfMap = new ArrayList<HashMap<String,String>>();
-        HashMap<String,String> map;
+        HashMap<String,String> hashmap;
         try {
             while (resultSet.next()) {
-                map = new HashMap<String, String>();
-                map.put("Code", resultSet.getString("Code"));
-                map.put("Name", resultSet.getString("Name"));
-                listOfMap.add(map);
+                hashmap = new HashMap<String, String>();
+                hashmap.put("Code", resultSet.getString("Code"));
+                hashmap.put("Name", resultSet.getString("Name"));
+                listOfMap.add(hashmap);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         for (int i=0;i<listOfMap.size();i++)
-            System.out.println("listOfMap:" + listOfMap.get(i));
+           System.out.println("listOfMap:" + listOfMap.get(i));
+
         return listOfMap;
     }
 }
